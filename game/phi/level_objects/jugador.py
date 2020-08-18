@@ -1,0 +1,305 @@
+import element
+import extra_data.images as ei
+import pygame,time,hackers,threading,disk
+from pygame.locals import *
+
+def ev(lista,valor):
+    for x in range(len(lista)):
+        if lista[x] == valor:
+            return True
+    return False
+
+class jugador(element.element):
+    def __init__(self,x,y,name,principal,ID = 0):
+        self.ID = ID
+        self.principal = principal
+        self.jug = ei.tux.adelante.positions[0]
+        self.element(x, y, name, "jugador", [], self.jug)
+        self.lpact = "no"
+        self.pact = "no"
+        self.ciclo = 0
+        self.tam = self.jug.get_size()
+        self.life = 3
+        self.n_allowed = []
+        self.daniable = True
+        self.LM = 0
+        self.Tdaniado_init = 2
+        self.Tdaniado = 2  #En segundos se puede con decimal
+        self.first_time = True
+        self.plata = 0
+        self.PERDIO = False
+        self.energy = 4
+        self.speed_base = 5
+        self.speed = self.speed_base
+        self.programador = False
+        self.TACT = 0
+        self.discos = 5
+        self.disparando_discos = False
+        self.Sdiscos = ei.disco
+        self.indice_disco = 0
+        self.salio_del_boton = True
+        self.escudo_activado = False
+        self.temporal = False
+    def titilar(self):
+        if self.first_time:
+            self.loops = 0
+            self.lloops = 0
+        self.first_time = False
+        if self.loops > self.lloops + 10:
+            self.lloops = self.loops
+            if self.permitido_act == False:
+                self.permitido_act = True
+            else:
+                self.permitido_act = False
+        self.loops += 1
+    def restar_energia(self,cant):
+        if self.daniable:
+            self.energy -= cant
+            if self.energy <= 0:
+                self.life -= 1
+                self.energy = 4 - (0-self.energy)
+                if self.life <= 0:
+                    self.PERDIO = True
+            self.daniable = False
+            tim = time.time()
+            self.LM = tim
+            return True
+        else:
+            if self.temporal:
+                self.temporal = False
+                self.LM = time.time()
+                self.Tdaniado = 2
+            else:
+                return False
+    def activar_escudo(self,tdaniado,temporal=False):
+        self.daniable = False
+        tim = time.time()
+        self.LM = tim
+        self.Tdaniado = tdaniado
+        self.escudo_activado = True
+        self.temporal = temporal
+    def colicion_detection(self,UP):
+        if self.principal:
+            UP.my_player = self.NAME
+        self.n_allowed = []
+        for x in range(len(UP.objetos)):
+            if UP.objetos[x].permitido_act:
+                choque = False
+                pared = False
+                enemy = False
+                mobile = False
+                dinero = False
+                for y in range(len(UP.objetos[x].TAGS)):
+                    if UP.objetos[x].TAGS[y] == "Wall":
+                        choque = True
+                    if UP.objetos[x].TAGS[y] == "SWall":
+                        pared = True
+                    if UP.objetos[x].TAGS[y] == "Enemy":
+                        enemy = True
+                    if UP.objetos[x].TAGS[y] == "Mobile":
+                        mobile = True
+                    if UP.objetos[x].TAGS[y] == "Plata":
+                        dinero = True
+                if choque == True:
+                    if self._x+self.tam[0] > UP.objetos[x]._x and self._x < UP.objetos[x]._x+UP.objetos[x].W:
+                        if self._y+self.tam[1] > UP.objetos[x]._y and self._y < UP.objetos[x]._y+UP.objetos[x].H:
+                            if enemy:
+                                self.restar_energia(UP.objetos[x].potencia)
+                            if self._x + self.tam[0]  >= UP.objetos[x]._x and self._x + self.tam[0] <= UP.objetos[x]._x + 15:
+                                self.n_allowed.append("derecha")
+                                if mobile:
+                                    self._x = UP.objetos[x]._x - self.tam[0]
+                            if self._x  <= UP.objetos[x]._x + UP.objetos[x].W and self._x >= UP.objetos[x]._x + UP.objetos[x].W - 15:
+                                self.n_allowed.append("izquierda")
+                                if mobile:
+                                    self._x = UP.objetos[x]._x + UP.objetos[x].W
+                            if self._y + self.tam[1] > UP.objetos[x]._y and self._y + self.tam[1] < UP.objetos[x]._y + 15:
+                                self.n_allowed.append("abajo")
+                                if mobile:
+                                    self._y = UP.objetos[x]._y - self.tam[1]
+                            if pared == True:
+                                if UP.objetos[x].ubic == "Arriba":
+                                    if self._y < UP.objetos[x]._y + UP.objetos[x].H - 40 and self._y > UP.objetos[x]._y + 15 - 40:
+                                        self.n_allowed.append("arriba")
+                                elif UP.objetos[x].ubic == "Abajo" or UP.objetos[x].ubic == "Centro":
+                                    if self._y < UP.objetos[x]._y + UP.objetos[x].H and self._y > UP.objetos[x]._y + 15:
+                                        self.n_allowed.append("arriba")
+                            else:
+                                if self._y < UP.objetos[x]._y + UP.objetos[x].H and self._y > UP.objetos[x]._y + 15:
+                                    self.n_allowed.append("arriba")
+                                    if mobile:
+                                        self._y = UP.objetos[x]._y + UP.objetos[x].H
+                X,Y = UP.objetos[x]._x,UP.objetos[x]._y
+                w,h = UP.objetos[x].W,UP.objetos[x].H
+                if self._x+self.tam[0] > X and self._y+self.tam[1] > Y and self._x < X+w and self._y < Y+h:
+                    if dinero:
+                        UP.objetos[x].permitido_act = False
+                        self.plata += UP.objetos[x].costo
+                    if UP.objetos[x].TYPE == "vida_extra":
+                        UP.objetos[x].permitido_act = False
+                        self.life += 1
+                    if UP.objetos[x].TYPE == "Box":
+                        if UP.objetos[x].es_caja:
+                            UP.objetos[x].convertir(UP)
+                    if UP.objetos[x].TYPE == "Dinamite":
+                        if self._x + self.tam[0] > X+w/2-3 and self._y + self.tam[1] > Y and self._x < X + (w/2+3) and self._y < Y + h/3:
+                            UP.objetos[x].explotando = True
+                    if UP.objetos[x].TYPE == "Agarrar disco":
+                        if not self.programador:
+                            self.discos += 5
+                        else:
+                            self.discos += 50
+                    if UP.objetos[x].TYPE == "Button":
+                        if self.salio_del_boton:
+                            self.salio_del_boton = False
+                            if UP.objetos[x].presionado:
+                                UP.objetos[x].presionado = False
+                            else:
+                                UP.objetos[x].presionado = True
+                    if UP.objetos[x].TYPE == "Checkpoint":
+                        UP.objetos[x].checked = True
+                    if UP.objetos[x].TYPE == "Teletransportador_in":
+                        self._x,self._y = UP.objetos[x].pos_out[0], UP.objetos[x].pos_out[1]
+                    if UP.objetos[x].TYPE == "Meta":
+                        UP.objetos[x].checked = True
+                elif UP.objetos[x].TYPE == "Button":
+                    self.salio_del_boton = True
+    def analizar_backgrounds(self,UP):
+        background_act = None
+        for obj in UP.objetos:
+            if obj.TYPE == "background":
+                if self._x > obj._x and self._x < obj._x + obj.W and self._y > obj._y and self._y < obj._y + obj.H:
+                    background_act = obj
+        if background_act != None:
+            self.speed_base = background_act.speed
+            if background_act.danino != False:
+                self.restar_energia(background_act.danino)
+        else:
+            self.speed_base = 5
+    def sumar_monedas(self,cuantas):
+        self.plata += cuantas
+    def plu(self, events, UP):
+        if self.principal and UP.my_player == self.NAME:
+            dev = hackers.detectar(self,UP)
+            if dev != None:
+                return [dev]
+            tim = time.time()
+            if tim > self.LM + self.Tdaniado:
+                self.daniable = True
+                self.first_time = True
+                self.permitido_act = True
+                self.Tdaniado = self.Tdaniado_init
+                self.escudo_activado = False
+            else:
+                self.titilar()
+            
+            if self.PERDIO:
+                return ["destroyme"]
+            
+            key = events.get_keyboard()
+            something = False
+            
+            self.programador = False
+            if key[pygame.K_F5] and key[pygame.K_F8]:
+                self.programador = True
+            if self.programador:
+                self.speed = 7
+            else:
+                self.analizar_backgrounds(UP)
+                self.speed = self.speed_base
+            if (self.ID == 0):
+                condA = key[pygame.K_UP]
+                condB = key[pygame.K_DOWN]
+                condC = key[pygame.K_LEFT]
+                condD = key[pygame.K_RIGHT]
+                condE = key[pygame.K_SPACE]
+            else:
+                print self.ID
+                print events.get_m()
+                print events.fv(self.ID)
+               
+                condA = events.get_m()[events.fv(self.ID)][1]
+                condB = events.get_m()[events.fv(self.ID)][2]
+                condC = events.get_m()[events.fv(self.ID)][3]
+                condD = events.get_m()[events.fv(self.ID)][4]
+                condE = events.get_m()[events.fv(self.ID)][5]
+            if condA:
+                if not(ev(self.n_allowed,"arriba")) or self.programador:
+                    self._y -= self.speed
+                if self.pact != "ad":
+                    self.lpact = self.pact
+                    self.pact = "ad"
+                something = True
+            if condB:
+                if not(ev(self.n_allowed,"abajo")) or self.programador:
+                    self._y += self.speed
+                if self.pact != "at":
+                    self.lpact = self.pact
+                    self.pact = "at"
+                something = True
+            if condC:
+                if not(ev(self.n_allowed,"izquierda")) or self.programador:
+                    self._x -= self.speed
+                if self.pact != "iz":
+                    self.lpact = self.pact
+                    self.pact = "iz"
+                something = True
+            if condD:
+                if not(ev(self.n_allowed,"derecha")) or self.programador:
+                    self._x += self.speed
+                if self.pact != "de":
+                    self.lpact = self.pact
+                    self.pact = "de"
+                something = True
+            
+            if (something == False):
+                self.surface = ei.tux.adelante.positions[0]
+                self.pact = "no"
+               
+            if self.pact == "ad":
+                if self.lpact != self.pact: 
+                    self.ciclo += 1    
+                        
+                    if self.ciclo / 8 > 2:
+                        self.ciclo = 0
+                    self.surface = ei.tux.atras.positions[self.ciclo/8]
+            if self.pact == "at":
+                if self.lpact != self.pact: 
+                    self.ciclo += 1    
+                        
+                    if self.ciclo / 8 > 2:
+                        self.ciclo = 0
+                    self.surface = ei.tux.adelante.positions[self.ciclo/8]
+            if self.pact == "de":
+                if self.lpact != self.pact: 
+                    self.ciclo += 1    
+                        
+                    if self.ciclo / 4 > 5:
+                        self.ciclo = 0
+                    self.surface = ei.tux.derecha.positions[self.ciclo/4]
+            if self.pact == "iz":
+                if self.lpact != self.pact: 
+                    self.ciclo += 1    
+                        
+                    if self.ciclo / 4 > 5:
+                        self.ciclo = 0
+                    self.surface = ei.tux.izquierda.positions[self.ciclo/4]
+                    
+            self.colicion_detection(UP)
+            
+            if condE:
+                if not self.disparando_discos:
+                    self.disparando_discos = True
+                    if self.discos > 0:
+                        if self.pact != "no":
+                            pact = self.pact
+                        else:
+                            pact = "at"
+                        UP.objetos.append(disk.disk(self._x, self._y, pact, len(UP.objetos), "Disco"))
+                        self.discos -= 1
+            N = False
+            for q in UP.objetos:
+                if q.TYPE == "Disco":
+                    N = True
+            if N == False:
+                self.disparando_discos = False

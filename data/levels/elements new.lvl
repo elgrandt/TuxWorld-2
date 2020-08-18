@@ -1,0 +1,12 @@
+level{
+	name: 'Nivel de prueba'
+	author: 'Ariel'
+	description: 'Nuevos elementos'
+	arenas: arena1
+}
+arena1{
+	player1: 100 100 1
+	background: 80 80 20 20 "background 1" 1
+	bomb: 400 400 "Test bomb 1"
+	
+}

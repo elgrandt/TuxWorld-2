@@ -1,0 +1,113 @@
+level{
+	name: 'primernivel'
+	author: 'santi'
+	description: 'nothing'
+	arenas: arena1
+}
+arena1{
+	background: 1 -112 10 10 "Background 0" 1
+	wall: 2 -110 5 2 False "Arriba" "Wall 0"
+	wall: 1 -109 5 2 True "Centro" "Wall 1"
+	wall: 423 -109 5 2 True "Centro" "Wall 2"
+	puerta: 1 368 "Horizontal" "Puerta 1" 4
+	wall: 201 315 1 2 False "Centro" "Wall 3"
+	puerta: 301 368 "Horizontal" "Puerta 2" 4
+	esquina: 2 -109 0 "Esquina 0"
+	esquina: 422 -109 3 "Esquina 1"
+	background: 2 393 10 7 "Background 1" 1
+	esquina: 2 395 2 "Esquina 2"
+	esquina: 421 395 1 "Esquina 3"
+	wall: 2 743 5 2 False "Centro" "Wall 7"
+	wall: 203 703 1 1 False "Centro" "Wall 8"
+	wall: 203 652 1 1 False "Centro" "Wall 9"
+	wall: 202 602 1 1 False "Centro" "Wall 10"
+	wall: 202 553 1 1 False "Centro" "Wall 11"
+	wall: 202 503 1 1 False "Centro" "Wall 12"
+	wall: 203 453 1 1 False "Centro" "Wall 13"
+	wall: 202 403 1 1 False "Centro" "Wall 14"
+	background: -998 393 20 8 "Background 2" 1
+	background: 502 393 20 8 "Background 3" 1
+	wall: -598 743 6 2 False "Centro" "Wall 15"
+	wall: -998 394 10 2 False "Centro" "Wall 16"
+	wall: -997 742 1 2 False "Centro" "Wall 17"
+	wall: -1078 394 4 2 True "Centro" "Wall 18"
+	esquina: -1077 394 0 "Esquina 4"
+	esquina: -1078 742 1 "Esquina 5"
+	background: -950 823 8 20 "Background 4" 2
+	wall: -897 742 1 1 True "Centro" "Wall 19"
+	wall: -638 743 1 1 True "Centro" "Wall 20"
+	puerta: -847 794 "Horizontal" "Puerta 3" 4
+	wall: -977 822 10 2 True "Izquierda" "Wall 21"
+	wall: -598 823 10 2 True "Centro" "Wall 22"
+	enemy: -858 1548 "Enemy 0" 1 True "Vertical" 0 921 0 1723
+	enemy: -693 1043 "Enemy 1" 1 True "Vertical" 0 921 0 1723
+	enemy: -771 1282 "Enemy 2" 1 True "Vertical" 0 921 0 1723
+	background: -1373 1818 25 10 "Background 5" 3
+	wall: -1375 1817 5 1 False "Centro" "Wall 23"
+	wall: -622 1817 5 1 False "Centro" "Wall 24"
+	wall: -1375 2279 5 1 False "Centro" "Wall 25"
+	wall: -621 2281 5 1 False "Centro" "Wall 26"
+	wall: -1374 1820 5 1 True "Centro" "Wall 27"
+	wall: -162 1821 5 1 True "Centro" "Wall 28"
+	enemy: -1163 1881 "Enemy 3" 1 True "Horizontal" -1276 0 -221 0
+	enemy: -376 2222 "Enemy 4" 1 True "Horizontal" -1276 0 -221 0
+	enemy: -972 1959 "Enemy 5" 1 True "Horizontal" -1276 0 -221 0
+	enemy: -440 2159 "Enemy 6" 1 True "Horizontal" -1276 0 -221 0
+	enemy: -930 2024 "Enemy 7" 1 True "Horizontal" -1276 0 -221 0
+	enemy: -739 2079 "Enemy 8" 1 True "Horizontal" -1276 0 -221 0
+	background: -925 2316 7 8 "Background 6" 1
+	wall: -956 2316 4 2 True "Izquierda" "Wall 29"
+	esquina: -954 2280 3 "Esquina 6"
+	wall: -623 2316 1 2 True "Centro" "Wall 30"
+	puerta: -569 2416 "Vertical" "Puerta 4" 4
+	wall: -623 2614 1 2 True "Centro" "Wall 31"
+	esquina: -624 2281 0 "Esquina 7"
+	wall: -953 2711 4 2 False "Centro" "Wall 32"
+	esquina: -956 2710 1 "Esquina 8"
+	esquina: -623 2711 2 "Esquina 9"
+	checkpoint: -810 2610 "Checkpoint 0"
+	wall: 502 395 10 2 False "Centro" "Wall 33"
+	wall: 502 743 6 2 False "Centro" "Wall 34"
+	wall: 1423 396 4 2 True "Derecha" "Wall 35"
+	wall: 1353 744 1 2 False "Centro" "Wall 36"
+	puerta: 1128 794 "Horizontal" "Puerta 5" 4
+	esquina: 1422 744 2 "Esquina 10"
+	esquina: 1424 395 3 "Esquina 11"
+	background: 1036 821 8 20 "Background 7" 3
+	wall: 1001 817 10 2 True "Centro" "Wall 37"
+	wall: 1375 819 10 2 True "Centro" "Wall 38"
+	wall: 1080 743 1 1 True "Centro" "Wall 39"
+	wall: 1337 743 1 1 True "Centro" "Wall 40"
+	enemy: 1121 856 "Enemy 9" 1 True "Horizontal" 1102 0 1355 0
+	enemy: 1191 959 "Enemy 11" 1 True "Horizontal" 1102 0 1355 0
+	enemy: 1266 1057 "Enemy 13" 1 True "Horizontal" 1102 0 1355 0
+	enemy: 1177 1154 "Enemy 15" 1 True "Horizontal" 1102 0 1355 0
+	enemy: 1114 1259 "Enemy 17" 1 True "Horizontal" 1102 0 1355 0
+	enemy: 1197 1348 "Enemy 19" 1 True "Horizontal" 1102 0 1355 0
+	enemy: 1266 1447 "Enemy 21" 1 True "Horizontal" 1102 0 1355 0
+	background: 602 1816 25 10 "Background 8" 2
+	wall: 601 1816 5 1 False "Centro" "Wall 41"
+	wall: 1353 1815 5 1 False "Centro" "Wall 42"
+	wall: 600 2276 5 1 False "Centro" "Wall 43"
+	wall: 1354 2280 5 1 False "Centro" "Wall 44"
+	wall: 1814 1819 5 1 True "Centro" "Wall 45"
+	wall: 601 1818 5 1 True "Centro" "Wall 46"
+	enemy: 696 1864 "Enemy 22" 2 True "Horizontal" 647 0 1802 0
+	enemy: 1690 2114 "Enemy 23" 1 True "Horizontal" 647 0 1802 0
+	enemy: 1690 2201 "Enemy 24" 1 True "Horizontal" 647 0 1802 0
+	background: 1051 2315 7 9 "Background 9" 1
+	wall: 1353 2316 4 2 True "Centro" "Wall 48"
+	esquina: 1354 2281 0 "Esquina 13"
+	wall: 1025 2715 4 2 False "Centro" "Wall 49"
+	esquina: 1353 2712 2 "Esquina 14"
+	wall: 1021 2314 1 2 True "Centro" "Wall 50"
+	wall: 1021 2615 1 2 True "Centro" "Wall 51"
+	esquina: 1022 2276 3 "Esquina 15"
+	esquina: 1022 2714 1 "Esquina 16"
+	puerta: 1026 2414 "Vertical" "Puerta 6" 4
+	checkpoint: 1167 2612 "Checkpoint 1"
+	background: -536 2313 31 9 "Background 10" 1
+	wall: -543 2711 16 2 False "Abajo" "Wall 52"
+	esquina: 1019 2712 1 "Esquina 17"
+	player1: 100 100 1
+}
